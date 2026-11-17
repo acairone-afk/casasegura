@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07152f">
+  <meta name="description" content="Panel educativo de control para una maqueta domótica segura con ESP32.">
+  <title>CasaSegura IoT</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div>
+          <p class="eyebrow">PROYECTO DE INFORMÁTICA · IOT SEGURO</p>
+          <h1>Casa<span>Segura</span> <b>IoT</b></h1>
+        </div>
+      </div>
+      <div class="top-tag">DOMÓTICA <i>+</i> REDES <i>+</i> CIBERSEGURIDAD</div>
+    </header>
+
+    <section class="hero-card">
+      <div class="hero-copy">
+        <div class="status-line"><span class="pulse"></span><span id="heroMode">MODO DEMOSTRACIÓN ACTIVO</span></div>
+        <h2>Protegé tu casa<br><span>antes de abrir.</span></h2>
+        <p>Una interfaz educativa para controlar una cerradura y una alarma domótica, y entender cómo una credencial robada podría convertirse en un acceso no autorizado.</p>
+        <div class="hero-actions">
+          <button class="primary-btn" data-scroll="control">Ir al panel <span>↓</span></button>
+          <button class="ghost-btn" data-scroll="security">Ver medidas de seguridad</button>
+        </div>
+      </div>
+      <div class="hero-art-wrap">
+        <img src="assets/casa-segura.png" alt="Casa inteligente protegida por un escudo digital ante una amenaza de phishing">
+        <div class="art-chip chip-phishing"><span>🎣</span><div><strong>Phishing detectado</strong><small>Credenciales bajo alerta</small></div></div>
+        <div class="art-chip chip-shield"><span>🛡️</span><div><strong>Casa protegida</strong><small>Acceso validado</small></div></div>
+      </div>
+    </section>
+
+    <section class="connection-strip" aria-label="Estado de conexión">
+      <div class="connection-main"><span id="connectionDot" class="connection-dot demo"></span><div><strong id="connectionLabel">Modo demostración</strong><small id="connectionDetail">Probá la interfaz sin conectar el hardware</small></div></div>
+      <div class="connection-actions"><button id="modeToggle" class="mini-btn">Conectar ESP32</button><button id="refreshBtn" class="icon-btn" title="Actualizar estado" aria-label="Actualizar estado">↻</button></div>
+    </section>
+
+    <section class="workspace" id="control">
+      <div class="section-heading"><div><p class="eyebrow coral">CENTRAL DE CONTROL</p><h2>Estado de la casa</h2></div><span id="actionState" class="action-state">Listo para operar</span></div>
+      <div class="dashboard-grid">
+        <article class="state-card lock-card"><div class="card-label"><span class="card-icon">▣</span><span>CERRADURA</span></div><div class="big-state" id="lockState">CERRADA</div><p id="lockHint">La puerta está protegida.</p><div class="state-track"><span id="lockTrack"></span></div></article>
+        <article class="state-card alarm-card"><div class="card-label"><span class="card-icon">◉</span><span>ALARMA</span></div><div class="big-state alarm-state disarmed" id="alarmState">DESARMADA</div><p id="alarmHint">No está vigilando.</p><div class="state-track"><span id="alarmTrack"></span></div></article>
+        <article class="event-card"><div class="card-label"><span class="card-icon">⌁</span><span>ÚLTIMO EVENTO</span></div><p id="lastEvent">Sistema listo para la demostración.</p><time id="lastTime">Ahora</time></article>
+        <article class="sensor-card"><div class="card-label"><span class="card-icon">⌖</span><span>DISTANCIA A LA PUERTA</span></div><div class="sensor-value" id="distanceValue">— cm</div><p>Medición del HC-SR04</p></article>
+        <article class="sensor-card"><div class="card-label"><span class="card-icon">☼</span><span>NIVEL DE LUZ</span></div><div class="sensor-value" id="lightValue">—</div><p>Lectura analógica de la LDR</p></article>
+        <article class="sensor-card"><div class="card-label"><span class="card-icon">!</span><span>MOTIVO DEL DISPARO</span></div><div class="sensor-reason" id="alarmReason">Ninguno</div><p>Se conserva hasta desarmar.</p></article>
+      </div>
+      <div class="sensor-alerts" aria-live="polite">
+        <div id="presenceAlert" class="sensor-alert presence-alert" hidden>Alguien está en la puerta</div>
+        <div id="lightAlert" class="sensor-alert light-alert" hidden>Luz detectada en la habitación</div>
+      </div>
+
+      <div class="control-panel">
+        <div class="panel-title"><span>ACCIONES CRÍTICAS</span><small>Abrir y desarmar solo se permiten desde un dispositivo vinculado.</small></div>
+        <div class="control-grid">
+          <button class="control-btn open" data-action="open"><span class="control-symbol">↗</span><span><strong>Abrir cerradura</strong><small>Requiere dispositivo vinculado</small></span><b>→</b></button>
+          <button class="control-btn close" data-action="close"><span class="control-symbol">↘</span><span><strong>Cerrar cerradura</strong><small>Proteger la entrada</small></span><b>→</b></button>
+          <button class="control-btn alarm" data-action="alarmOn"><span class="control-symbol">!</span><span><strong>Armar alarma</strong><small>Iniciar vigilancia silenciosa</small></span><b>→</b></button>
+          <button class="control-btn quiet" data-action="alarmOff"><span class="control-symbol">○</span><span><strong>Desarmar alarma</strong><small>Requiere dispositivo vinculado</small></span><b>→</b></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="connection-card" id="connection">
+      <div class="section-heading compact"><div><p class="eyebrow">CONEXIÓN POR INTERNET</p><h2>Conectá tu ESP32</h2></div><span class="local-pill">MQTT cifrado · cualquier red</span></div>
+      <div class="connection-form">
+        <label for="espIp">Código de la casa</label>
+        <div class="input-row"><span class="protocol">casasegura/</span><input id="espIp" type="text" placeholder="casa-xxxxxxxxxx" autocomplete="off"><button id="connectBtn" class="connect-btn">Conectar</button></div>
+        <p class="form-help">Es el ID_CASA del código del ESP32. El celular y la maqueta pueden estar en redes distintas: se comunican por el broker público HiveMQ y todos los mensajes viajan cifrados con la contraseña.</p>
+      </div>
+      <div class="endpoint-list"><span>/cmd</span><span>/resp/&lt;navegador&gt;</span><span>/online</span><span>AES-256-GCM</span><span>PBKDF2</span></div>
+    </section>
+
+
+    <section class="access-section" id="access">
+      <div class="section-heading compact"><div><p class="eyebrow coral">ACCESO SEGURO</p><h2>Sesión y dispositivo</h2></div><span id="sessionPill" class="local-pill">Sin sesión</span></div>
+      <div class="access-grid">
+        <article class="access-card" id="loginCard">
+          <div class="card-label"><span class="card-icon">⚿</span><span>INICIAR SESIÓN</span></div>
+          <p class="access-text">Ingresá la contraseña del panel. Después de 3 intentos rechazados la central bloquea el acceso durante 5 minutos y suena un aviso.</p>
+          <div class="input-row"><input id="password" type="password" placeholder="Contraseña" autocomplete="current-password"><button id="loginBtn" class="connect-btn">Ingresar</button></div>
+          <p id="loginMsg" class="form-help"></p>
+        </article>
+        <article class="access-card" id="sessionCard" hidden>
+          <div class="card-label"><span class="card-icon">⚿</span><span>SESIÓN INICIADA</span></div>
+          <p class="access-text">La sesión queda abierta en este dispositivo hasta que presiones Cerrar sesión.</p>
+          <button id="logoutBtn" class="mini-btn">Cerrar sesión</button>
+        </article>
+        <article class="access-card">
+          <div class="card-label"><span class="card-icon">⌂</span><span>ESTE DISPOSITIVO</span></div>
+          <p><span id="deviceBadge" class="device-badge no">No vinculado</span> <span id="deviceName" class="device-name"></span></p>
+          <div id="pairBox">
+            <p class="access-text">Para abrir o desarmar, este dispositivo debe vincularse. Escribí un nombre, presioná Vincular y luego el botón BOOT de la central dentro de los 30 segundos.</p>
+            <div class="input-row"><input id="deviceInput" type="text" maxlength="20" placeholder="Ej. Celular de Abril"><button id="pairBtn" class="connect-btn">Vincular</button></div>
+          </div>
+          <p id="pairMsg" class="form-help"></p>
+        </article>
+      </div>
+      <div class="log-card">
+        <div class="panel-title"><span>REGISTRO DE ACCESOS</span><small>Últimos 20 intentos, aceptados y rechazados.</small></div>
+        <div class="log-wrap"><table class="log-table"><thead><tr><th>Momento</th><th>Dispositivo</th><th>Acción</th><th>Resultado</th></tr></thead><tbody id="logBody"><tr><td colspan="4">Sin registros todavía.</td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="security-section" id="security">
+      <div class="section-heading compact"><div><p class="eyebrow lime">CASO DE CIBERSEGURIDAD</p><h2>Una contraseña robada no alcanza</h2></div></div>
+      <div class="security-grid"><article><span class="security-number">01</span><div><h3>Contraseña</h3><p>Primer factor. Si se filtra por phishing, por sí sola no abre la puerta.</p></div></article><article><span class="security-number">02</span><div><h3>Dispositivo vinculado</h3><p>Segundo factor. Solo un equipo aprobado con el botón de la central puede abrir o desarmar.</p></div></article><article><span class="security-number">03</span><div><h3>Bloqueo y registro</h3><p>Tres intentos rechazados bloquean el acceso 5 minutos con aviso sonoro, y cada intento queda registrado.</p></div></article><article><span class="security-number">04</span><div><h3>Mensajes cifrados</h3><p>El broker es público, pero los mensajes viajan cifrados con la contraseña: sin ella no se pueden leer ni falsificar.</p></div></article></div>
+    </section>
+
+    <footer><div><span class="footer-dot"></span> Prototipo educativo · CasaSegura IoT</div><div>ESP32 · MQTT · GitHub Pages</div></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="config.js"></script>
+  <script src="mqtt.min.js"></script>
+  <script src="cifrado.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
